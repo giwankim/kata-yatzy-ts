@@ -1,66 +1,57 @@
 export default class Yatzy {
 
-  static chance(d1: number, d2: number, d3: number, d4: number, d5: number): number {
-    var total = 0;
-    total += d1;
-    total += d2;
-    total += d3;
-    total += d4;
-    total += d5;
-    return total;
+  private static sum(arr: number[]): number {
+    return arr.reduce((acc, v) => acc + v, 0);
+  }
+
+  static chance(...dice: number[]): number {
+    return this.sum(dice);
+  }
+
+  static ones(...dice: number[]): number {
+    return this.sum(dice.filter(die => die === 1));
+  }
+
+  static twos(...dice: number[]): number {
+    return this.sum(dice.filter(die => die === 2));
+  }
+
+  static threes(...dice: number[]): number {
+    return this.sum(dice.filter(die => die === 3));
+  }
+
+  static fours(...dice: number[]): number {
+    return this.sum(dice.filter(die => die === 4));
+  }
+
+  static fives(...dice: number[]): number {
+    return this.sum(dice.filter(die => die === 5));
+  }
+
+  static sixes(...dice: number[]): number {
+    return this.sum(dice.filter(die => die === 6));
   }
 
   static yatzy(...args: number[]): number {
-    var counts = [0, 0, 0, 0, 0, 0, 0, 0];
-    for (var i = 0; i != args.length; ++i) {
-      var die = args[i];
-      counts[die - 1]++;
-    }
-    for (i = 0; i != 6; i++) if (counts[i] == 5) return 50;
+    const counts = this.countValues(args);
+    for (let i = 0; i != 6; i++) if (counts[i] == 5) return 50;
     return 0;
   }
 
-  static ones(d1: number, d2: number, d3: number, d4: number, d5: number): number {
-    var sum = 0;
-    if (d1 == 1) sum++;
-    if (d2 == 1) sum++;
-    if (d3 == 1) sum++;
-    if (d4 == 1) sum++;
-    if (d5 == 1) sum++;
-
-    return sum;
+  private static countValues(args: number[]) {
+    const counts = [0, 0, 0, 0, 0, 0, 0, 0];
+    for (let i = 0; i < 5; ++i) {
+      counts[args[i] - 1]++;
+    }
+    return counts;
   }
 
-  static twos(d1: number, d2: number, d3: number, d4: number, d5: number): number {
-    var sum = 0;
-    if (d1 == 2) sum += 2;
-    if (d2 == 2) sum += 2;
-    if (d3 == 2) sum += 2;
-    if (d4 == 2) sum += 2;
-    if (d5 == 2) sum += 2;
-    return sum;
-  }
-
-  static threes(d1: number, d2: number, d3: number, d4: number, d5: number): number {
-    var s;
-    s = 0;
-    if (d1 == 3) s += 3;
-    if (d2 == 3) s += 3;
-    if (d3 == 3) s += 3;
-    if (d4 == 3) s += 3;
-    if (d5 == 3) s += 3;
-    return s;
-  }
-
-  static onePair(d1: number, d2: number, d3: number, d4: number, d5: number): number {
-    var counts = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-    counts[d1 - 1]++;
-    counts[d2 - 1]++;
-    counts[d3 - 1]++;
-    counts[d4 - 1]++;
-    counts[d5 - 1]++;
-    var at;
-    for (at = 0; at != 6; at++) if (counts[6 - at - 1] >= 2) return (6 - at) * 2;
+  static onePair(...args: number[]): number {
+    const counts = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+    for (let i = 0; i < 5; ++i) {
+      counts[args[i] - 1]++;
+    }
+    for (let at = 0; at != 6; at++) if (counts[6 - at - 1] >= 2) return (6 - at) * 2;
     return 0;
   }
 
@@ -159,29 +150,5 @@ export default class Yatzy {
 
     if (_2 && _3) return _2_at * 2 + _3_at * 3;
     else return 0;
-  }
-
-  static fours(...p: number[]): number {
-    var sum;
-    sum = 0;
-    for (let at = 0; at != 5; at++) {
-      if (p[at] == 4) {
-        sum += 4;
-      }
-    }
-    return sum;
-  }
-
-  static fives(...dice: number[]): number {
-    let s = 0;
-    var i;
-    for (i = 0; i < dice.length; i++) if (dice[i] == 5) s = s + 5;
-    return s;
-  }
-
-  static sixes(...dice: number[]): number {
-    let sum = 0;
-    for (var at = 0; at < dice.length; at++) if (dice[at] == 6) sum = sum + 6;
-    return sum;
   }
 }
